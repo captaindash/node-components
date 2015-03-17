@@ -6,8 +6,6 @@ RM?=rm
 NODE_MODULES?=node_modules
 
 
-all: $(NODE_MODULES)
-
 test: $(NODE_MODULES)
 	$(NPM) test
 
