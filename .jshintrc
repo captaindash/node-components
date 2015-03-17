@@ -1,0 +1,21 @@
+{
+  "enforceall": true,
+  "camelcase": false,
+  "es3": false,
+  "nocomma": false,
+  "singleGroups": false,
+
+  "esnext": true,
+  "node": true,
+
+  "globals": {
+    "before": false,
+    "beforeEach": false,
+    "after": false,
+    "afterEach": false,
+    "describe": false,
+    "it": false,
+    "expect": false,
+    "sinon": true
+  }
+}
