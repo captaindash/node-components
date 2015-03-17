@@ -1,11 +1,10 @@
 # Binaries
 NPM?=npm
+RM?=rm
 
 # Options
 NODE_MODULES?=node_modules
 
-
-all: $(NODE_MODULES)
 
 test: $(NODE_MODULES)
 	$(NPM) test
@@ -13,6 +12,9 @@ test: $(NODE_MODULES)
 $(NODE_MODULES):
 	$(NPM) install
 
+clean:
+	$(RM) -rf $(NODE_MODULES)
+
 
 # Phony some rules
-.PHONY: all test
+.PHONY: all test clean
