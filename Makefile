@@ -8,7 +8,7 @@ NODE_MODULES?=node_modules
 all: $(NODE_MODULES)
 
 test: $(NODE_MODULES)
-	npm test
+	$(NPM) test
 
 $(NODE_MODULES):
 	$(NPM) install
