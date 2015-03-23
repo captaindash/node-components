@@ -102,7 +102,7 @@ Redis.publish = function(label, key, value) {
   return new BPromise(function(resolve, reject) {
 
     if (!Redis.connection[label]) {
-      return reject(new Error(`No connected database for label: "${label}"`));
+      return reject(new Error('No connected database for label: "' + label + '"'));
     }
 
     if (_.isString(Redis.prefix)) { key = Redis.prefix + ':' + key; }
