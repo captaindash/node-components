@@ -6,6 +6,7 @@
     "test": "jshint *.js && mocha --check-leaks *.spec.js"
   },
   "dependencies": {
+    "babel": "4.7.16",
     "bluebird": "2.9.14",
     "bunyan": "1.3.4",
     "hiredis": "0.2.0",
