@@ -17,4 +17,4 @@ clean:
 
 
 # Phony some rules
-.PHONY: all test clean
+.PHONY: test clean
