@@ -1,6 +1,6 @@
 'use strict';
 
-var cleaner = require('./cleaner');
+var cleaner = require('./Cleaner');
 
 describe('[Unit] Cleaner', function() {
 
