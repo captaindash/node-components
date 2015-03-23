@@ -8,7 +8,10 @@
   "dependencies": {
     "bluebird": "2.9.14",
     "bunyan": "1.3.4",
-    "lodash": "3.5.0"
+    "hiredis": "0.2.0",
+    "lodash": "3.5.0",
+    "mongodb": "1.4.34",
+    "redis": "0.12.1"
   },
   "devDependencies": {
     "chai": "2.1.2",

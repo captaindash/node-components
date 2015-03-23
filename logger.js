@@ -2,76 +2,76 @@
 
 /*
  * This is a simple logger which relies on Bunyan. Requiring this module
- * instantiates a new logger writing on stdout.
+ * instantiates a new Logger, writing on stdout.
  *
  * How to use:
  *
  * ```
- * var logger = require('components/logger');
+ * var Logger = require('components/Logger');
  *
- * logger.setName('foobar').setLevel('error');
+ * Logger.setName('foobar').setLevel('error');
  *
- * logger.fatal('Critical error');
- * logger.error('Error');
- * logger.warn('Warning');
- * logger.info('Informations');
- * logger.debug('foo');
- * logger.trace('bar');
+ * Logger.fatal('Critical error');
+ * Logger.error('Error');
+ * Logger.warn('Warning');
+ * Logger.info('Informations');
+ * Logger.debug('foo');
+ * Logger.trace('bar');
  * ```
  */
 
 var _ = require('lodash');
 var bunyan = require('bunyan');
 
-var loggerOptions = {
+
+var LoggerOptions = {
   name: 'default',
   streams: [
     { stream: process.stdout },
   ],
 };
 
-var logger = bunyan.createLogger(loggerOptions);
+var Logger = bunyan.createLogger(LoggerOptions);
 
 /**
- * Change the logger name.
+ * Change the Logger name.
  *
  * @param {String} name
-
+ *
  * @return {Logger}
  */
-logger.setName = function(name) {
+Logger.setName = function(name) {
   if (_.isString(name) && name.length > 0) {
-    logger.fields.name = name;
+    Logger.fields.name = name;
   } else {
-    throw new Error('Invalid logger name "' + name + '" (' + (typeof name) + ')');
+    throw new Error('Invalid Logger name "' + name + '" (' + (typeof name) + ')');
   }
 
-  return logger;
+  return Logger;
 };
 
 /**
- * Change the log level below which nothing will be printed.
- * See: https://github.com/trentm/node-bunyan#levels
- *
- * e.g.: setting it to 'info' would ignore both 'debug' and 'trace'.
+ * Change the log level below which nothing will be printed (e.g.: setting it to
+ * 'info' would ignore both 'debug' and 'trace').
+ * @see {@link https://github.com/trentm/node-bunyan#levels}
  *
  * @param {String} level
  *
  * @return {Logger}
  */
-logger.setLevel = function(level) {
+Logger.setLevel = function(level) {
   var normalizedLevel = bunyan[level.toUpperCase()];
 
   if (_.isNumber(normalizedLevel)) {
-    logger._level = normalizedLevel;
-    logger.streams.forEach(function(stream) {
+    Logger._level = normalizedLevel;
+    Logger.streams.forEach(function(stream) {
       stream.level = normalizedLevel;
     });
   } else {
     throw new Error('Invalid log level "' + level + '" (' + (typeof level) + ')');
   }
 
-  return logger;
+  return Logger;
 };
 
-module.exports = logger;
+module.exports = Logger;
