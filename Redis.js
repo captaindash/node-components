@@ -105,7 +105,7 @@ Redis.publish = function(label, key, value) {
       return reject(new Error('No connected database for label: "' + label + '"'));
     }
 
-    if (_.isString(Redis.prefix)) { key = Redis.prefix + ':' + key; }
+    if (_.isString(Redis._prefix)) { key = Redis._prefix + ':' + key; }
     if (!_.isString(value)) { value = JSON.stringify(value); }
 
     Redis.connection[label].publish(key, value, function(err, replies) {
@@ -118,12 +118,20 @@ Redis.publish = function(label, key, value) {
 };
 
 /**
+ * @private
  * Each key in the database will be prefixed by this string. This could be
  * useful when the same database is shared amongst several development contexts.
  *
  * @type {String}
  */
-Redis.prefix = null;
+Redis._prefix = null;
+
+/**
+ * @public
+ */
+Redis.setPrefix = (prefix) => {
+  Redis._prefix = prefix;
+};
 
 
 module.exports = Redis;
