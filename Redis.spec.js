@@ -21,4 +21,8 @@ describe('[Unit] Redis', function() {
     expect(Redis).to.respondTo('disconnect');
   });
 
+  it('should expose a setPrefix function', function() {
+    expect(Redis).to.respondTo('setPrefix');
+  });
+
 });

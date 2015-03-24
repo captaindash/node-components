@@ -129,7 +129,7 @@ Redis._prefix = null;
 /**
  * @public
  */
-Redis.setPrefix = (prefix) => {
+Redis.setPrefix = function(prefix) {
   Redis._prefix = prefix;
 };
 
