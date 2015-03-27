@@ -14,7 +14,6 @@ $(NODE_MODULES):
 	$(NPM) install
 
 clean:
-	$(RM) -rf $(NODE_MODULES)
 	$(GIT) clean -ffdx
 
 
