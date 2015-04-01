@@ -3,6 +3,9 @@
 var BPromise = require('bluebird');
 var mongodb = require('mongodb');
 
+var Cleaner = require('./Cleaner');
+var logger = require('./Logger');
+
 var MongoClient = mongodb.MongoClient;
 
 
@@ -29,6 +32,16 @@ MongoDB.connect = function(options) {
         MongoDB.connection = null;
         return reject(err);
       }
+
+      // Properly disconnect from MongoDB when exiting the program
+      Cleaner.onExit(function(done) {
+        logger.info('Disconnecting from MongoDB: %s', options.uri);
+        MongoDB.disconnect()
+          .then(done)
+          .error(done)
+        ;
+      });
+
       return resolve(MongoDB.connection = connection);
     });
   });

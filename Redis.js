@@ -7,6 +7,9 @@ var _ = require('lodash');
 var BPromise = require('bluebird');
 var redis = require('redis');
 
+var Cleaner = require('./Cleaner');
+var logger = require('./Logger');
+
 var EventEmitter = events.EventEmitter;
 
 
@@ -54,6 +57,16 @@ Redis.connect = function(connectionLabel, options)  {
     client.on('error', onConnectErrorListener);
 
     client.once('ready', function() {
+
+      Cleaner.onExit(function(done) {
+        // Properly disconnect from Redis when exiting the program
+        logger.info('Disconnecting from Redis[%s]: %s', connectionLabel, options.uri);
+        Redis.disconnect(connectionLabel)
+          .then(done.bind(null, null))
+          .error(done)
+        ;
+      });
+
       client.removeListener('error', onConnectErrorListener);
       return resolve(Redis.connection[connectionLabel] = client);
     });
@@ -236,7 +249,7 @@ Redis.unsubscribe = function(connectionLabel, channels, handler) {
 
 /**
  * @private
-
+ *
  * Each key in the database will be prefixed by this string. This could be
  * useful when the same database is shared amongst several development contexts.
  *
