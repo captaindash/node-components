@@ -55,11 +55,12 @@ Logger.setName = function(name) {
  * 'info' would ignore both 'debug' and 'trace').
  * @see {@link https://github.com/trentm/node-bunyan#levels}
  *
- * @param {String} level
+ * @param {String=} level - Default to 'info'
  *
  * @return {Logger}
  */
 Logger.setLevel = function(level) {
+  level = level || 'info';
   var normalizedLevel = bunyan[level.toUpperCase()];
 
   if (_.isNumber(normalizedLevel)) {
