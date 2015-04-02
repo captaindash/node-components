@@ -1,4 +1,5 @@
 # Binaries
+GIT?=git
 NPM?=npm
 RM?=rm
 
@@ -6,15 +7,15 @@ RM?=rm
 NODE_MODULES?=node_modules
 
 
-test: $(NODE_MODULES)
+test: clean $(NODE_MODULES)
 	$(NPM) test
 
 $(NODE_MODULES):
 	$(NPM) install
 
 clean:
-	$(RM) -rf $(NODE_MODULES)
+	$(GIT) clean -ffdx
 
 
 # Phony some rules
-.PHONY: all test clean
+.PHONY: test clean

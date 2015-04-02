@@ -2,8 +2,11 @@
 
 ## v2.0.0
 
-- Add `program`
+- `Cleaner`
+- `MongoDB`
+- `Redis`
+- `Transpiler`
 
 ## v1.0.0
 
-- Add `logger`
+- `Logger`
