@@ -39,10 +39,4 @@ describe('[Unit] Logger', function() {
     expect(function() { Logger.setName('');        }).to.throw(Error);
   });
 
-  it('should throw when specifying an invalid minimal log level', function() {
-    expect(function() { Logger.setLevel(undefined); }).to.throw(Error);
-    expect(function() { Logger.setLevel(null);      }).to.throw(Error);
-    expect(function() { Logger.setLevel(-1);        }).to.throw(Error);
-  });
-
 });
