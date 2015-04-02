@@ -10,11 +10,8 @@
  * var Cleaner = require('components/Cleaner');
  *
  * Cleaner.onExit(function(done) {
- *   try {
- *     console.log('Do some stuff...');
- *   } catch (err) {
- *     return done(err);
- *   }
+ *   console.log('Do some stuff...');
+ *   if (err) { return done(err); }
  *   return done();
  * });
  * ```
@@ -40,14 +37,9 @@ Cleaner._onExitFunctions = [];
  * Register a function to be executed when the program exits.
  */
 Cleaner.onExit = function(fn) {
-
-  if (!_.isArray(Cleaner._onExitFunctions)) {
-    return;
-  }
-
   Cleaner._onExitFunctions.push(function() {
     return new BPromise(function(resolve, reject) {
-      fn(function(err) {
+      fn(function done(err) {
         if (err) {
           return reject(err);
         }
@@ -63,29 +55,20 @@ Cleaner.onExit = function(fn) {
  *
  * @param {String} reason
  */
-Cleaner._cleanExit = function(config) {
+Cleaner._cleanExit = _.once(function(options) {
 
-  var reason = config.reason;
-
-  // Remove all other listeners
-  process.removeAllListeners();
-
-  // If the cleaning is already being done, abort
-  if (!_.isArray(Cleaner._onExitFunctions)) {
-    return null;
-  }
+  var reason = options.reason;
 
   logger.fatal('Terminating the process (reason: %s)', reason);
   logger.info('Starting to clean up...');
 
-  var promises = Cleaner._onExitFunctions.map(function(fn) { return fn(); });
-  Cleaner._onExitFunctions = null;
-
-  return BPromise.settle(promises)
+  return BPromise
+    .map(Cleaner._onExitFunctions, function(fn) { return fn(); })
+    .settle()
     .timeout(10 * 1000) // Abort if takes longer than 10 seconds
     .then(function() {
       logger.info('Successfully terminated the process');
-      process.exit();
+      process.exit(0);
     })
     .error(BPromise.TimeoutError, function() {
       logger.info('The cleaning process took too long. Aborting');
@@ -96,15 +79,12 @@ Cleaner._cleanExit = function(config) {
       process.exit(1);
     })
   ;
-};
+});
 
 (function staticConstructor() {
-  // - SIGINT, SIGQUIT, SIGTERM is being caught
-  // - process.exit is being called
-  process.once('SIGINT' , Cleaner._cleanExit.bind(null, { reason: 'SIGINT caught'       }));
-  process.once('SIGQUIT', Cleaner._cleanExit.bind(null, { reason: 'SIGQUIT caught'      }));
-  process.once('SIGTERM', Cleaner._cleanExit.bind(null, { reason: 'SIGTERM caught'      }));
-  process.once('exit'   , Cleaner._cleanExit.bind(null, { reason: 'process.exit called' }));
+  process.once('SIGINT' , Cleaner._cleanExit.bind(null, { reason: 'SIGINT caught'  }));
+  process.once('SIGQUIT', Cleaner._cleanExit.bind(null, { reason: 'SIGQUIT caught' }));
+  process.once('SIGTERM', Cleaner._cleanExit.bind(null, { reason: 'SIGTERM caught' }));
 })();
 
 
