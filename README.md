@@ -8,6 +8,10 @@ This library contains reusable Node.js components.
 
 ## Changelog
 
+### v2.2.0
+
+- `Cleaner` update
+
 ### v2.1.0
 
 - `Logger.setLevel()` is 'info' by default
