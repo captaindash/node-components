@@ -8,6 +8,10 @@ This library contains reusable Node.js components.
 
 ## Changelog
 
+### v2.1.0
+
+- `Logger.setLevel()` is 'info' by default
+
 ### v2.0.2
 
 - Exclude dev dependencies from npm shrinkwrap
