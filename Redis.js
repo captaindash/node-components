@@ -133,6 +133,47 @@ Redis.publish = function(connectionLabel, key, value) {
 };
 
 /**
+ * LPUSH the value at the given key, ensure the list never grows above the given
+ * size using LTRIM.
+ *
+ * @param {String=} connectionLabel
+ * @param {String} key
+ * @param {Object|String} value
+ * @param {Number} maxlen
+ *
+ * @return {BPromise}
+ */
+Redis.lpushlim = function(connectionLabel, key, value, maxlen) {
+  if (arguments.length === 3) {
+    size = value;
+    value = key;
+    key = connectionLabel;
+    connectionLabel = Redis.DEFAULT_CONNECTION_LABEL;
+  }
+  if (_.isString(Redis._prefix)) { key = Redis._prefix + ':' + key; }
+  if (!_.isString(value)) { value = JSON.stringify(value); }
+
+  return new BPromise(function(resolve, reject) {
+
+    if (!Redis.connection[connectionLabel]) {
+      return reject(new Error('No connected database for label: "' + connectionLabel + '"'));
+    }
+
+    var multi = Redis.connection[connectionLabel].multi();
+
+    multi.lpush(key, value);
+    multi.ltrim(key, 0, maxlen - 1);
+
+    multi.exec(function(err, replies) {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(replies);
+    });
+  });
+};
+
+/**
  * @private
  *
  * @type {Object}
@@ -245,6 +286,16 @@ Redis.unsubscribe = function(connectionLabel, channels, handler) {
       Redis.connection[connectionLabel].unsubscribe(channelWithPrefix);
     }
   });
+};
+
+/**
+ * Prefix the given string if Redis._prefix exists, do nothing otherwise.
+ */
+Redis.prefix = function(str) {
+  if (_.isString(Redis._prefix)) {
+    return Redis._prefix + ':' + str;
+  }
+  return str;
 };
 
 /**
