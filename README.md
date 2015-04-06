@@ -8,6 +8,10 @@ This library contains reusable Node.js components.
 
 ## Changelog
 
+### 2.4.1
+
+- Fix issue in `Redis.lpushlim`
+
 ### 2.4.0
 
 - Add `Redis.lpushlim`
