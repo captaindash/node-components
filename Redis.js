@@ -145,7 +145,7 @@ Redis.publish = function(connectionLabel, key, value) {
  */
 Redis.lpushlim = function(connectionLabel, key, value, maxlen) {
   if (arguments.length === 3) {
-    size = value;
+    maxlen = value;
     value = key;
     key = connectionLabel;
     connectionLabel = Redis.DEFAULT_CONNECTION_LABEL;
