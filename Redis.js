@@ -47,7 +47,7 @@ Redis.connect = function(connectionLabel, options)  {
 
     var info = url.parse(options.uri);
     var client = redis.createClient(info.port, info.hostname, {
-      parser: 'hiredis',
+      //parser: 'hiredis',
     });
 
     var onConnectErrorListener = function(err) {
