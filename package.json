@@ -1,5 +1,5 @@
 {
-  "name": "components",
+  "name": "node-components",
   "version": "2.6.6",
   "scripts": {
     "test": "jshint *.js && mocha --check-leaks *.spec.js"
