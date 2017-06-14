@@ -50,10 +50,9 @@ Redis.connect = function(connectionLabel, options)  {
       //parser: 'hiredis',
     });
 
-    if(options.password) {
-      client.auth(options.password, (error, authenticated) => {
-        if(error) console.erro("REDIS AUTH ERROR", error);
-      });
+    var password = info.auth && info.auth.split(":")[1];
+    if (password) {
+      client.auth(password);
     }
 
     var onConnectErrorListener = function(err) {
